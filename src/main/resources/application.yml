@@ -1,0 +1,29 @@
+server:
+  port: 8081
+
+rabbit:
+  topic-exchange-name: spring-boot-exchange
+  queue-name: spring-boot
+  routing-key: foo.bar.baz
+
+spring:
+  liquibase:
+    change-log: classpath:/changelog/changelog-master.xml
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://mysqldb:3306/product-sample?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+#    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        show-sql: true
+        format-sql: true
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+  #    defer-datasource-initialization: true
+  rabbitmq:
+    host: rabbitmq
+    port: 5672

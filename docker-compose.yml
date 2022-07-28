@@ -1,0 +1,48 @@
+version: "3"
+
+services:
+  spring-boot-app:
+    image: spring-boot-app
+    container_name: app-sample
+    #    restart: always
+    build:
+      context: ./
+    ports:
+      - 8081:8081
+    environment:
+      - jdbc:mysql://mysqldb:3306/product-sample?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+    networks:
+      - mysql-simple-net
+      - rabbitmq-simple-net
+    depends_on:
+      - mysqldb
+      - rabbitmq
+
+  mysqldb:
+    image: mysql:5.7
+    container_name: mysql-sample
+    volumes:
+      - mysql-sample-data:/var/lib/mysql
+    networks:
+      - mysql-simple-net
+    environment:
+      - MYSQL_DATABASE=product-sample
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - 3306:3306
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-sample
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - rabbitmq-simple-net
+
+networks:
+  mysql-simple-net:
+  rabbitmq-simple-net:
+volumes:
+  mysql-sample-data:
+  rabbitmq-data:
